@@ -6,11 +6,14 @@ import com.salesystem.model.OrderResult;
 import java.util.*;
 
 public class OrderService {
-    private static final double baseDiscount = 0.5;
-    public static final double stepDiscount = 0.05;
-    public static final double minDiscount = 0.0;
 
-    public static List<OrderResult> calculateOrderResults(List<Order> orders) {
+    public List<OrderResult> calculateOrderResults(
+            List<Order> orders,
+            double baseDiscount,
+            double stepDiscount,
+            double minDiscount
+    )
+    {
         Map<String, List<Order>> companyOrders = new HashMap<>();
 
         for (Order order : orders) {
@@ -36,7 +39,7 @@ public class OrderService {
                 double orderAmount = order.getAmount();
                 totalAmount += orderAmount;
 
-                double discountRate =Math.max(minDiscount,baseDiscount - (i * stepDiscount));
+                double discountRate = Math.max(minDiscount, baseDiscount - (i * stepDiscount));
                 discountedAmount += orderAmount * (1 - discountRate);
             }
             results.add(new OrderResult(companyName, totalAmount));
