@@ -4,6 +4,7 @@ import com.salesystem.model.Order;
 import com.salesystem.model.OrderResult;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderService {
 
@@ -12,38 +13,24 @@ public class OrderService {
             double baseDiscount,
             double stepDiscount,
             double minDiscount
-    )
-    {
-        Map<String, List<Order>> companyOrders = new HashMap<>();
+    ) {
+        orders.sort(Comparator.comparing(Order::getPurchaseDateTime));
 
+        Map<String, Double> resultsMap = new HashMap<>();
+        Map<String, Integer> orderCounts = new HashMap<>();
+        List<String> results = new ArrayList<>();
         for (Order order : orders) {
             String companyName = order.getCompanyName();
-            companyOrders.computeIfAbsent(companyName, k -> new ArrayList<>()).add(order);
+            double orderAmount = order.getAmount();
+            int currentCount = orderCounts.getOrDefault(companyName, 0);
+            double currentDiscount = Math.max(baseDiscount - stepDiscount * currentCount, minDiscount);
+            double discountedAmount = 10 * orderAmount * (1 - currentDiscount);
+            double currentTotal = resultsMap.getOrDefault(companyName, 0.0);
+            resultsMap.put(companyName, currentTotal + discountedAmount);
+            orderCounts.put(companyName, currentCount + 1);
         }
-
-        for (List<Order> companyOrderList : companyOrders.values()) {
-            companyOrderList.sort(Comparator.comparing(Order::getPurchaseDateTime));
-        }
-
-        List<OrderResult> results = new ArrayList<>();
-
-        for (Map.Entry<String, List<Order>> entry : companyOrders.entrySet()) {
-            String companyName = entry.getKey();
-            List<Order> orderList = entry.getValue();
-
-            double totalAmount = 0;
-            double discountedAmount = 0;
-
-            for (int i = 0; i < orderList.size(); i++) {
-                Order order = orderList.get(i);
-                double orderAmount = order.getAmount();
-                totalAmount += orderAmount;
-
-                double discountRate = Math.max(minDiscount, baseDiscount - (i * stepDiscount));
-                discountedAmount += orderAmount * (1 - discountRate);
-            }
-            results.add(new OrderResult(companyName, totalAmount));
-        }
-        return results;
+        return resultsMap.entrySet().stream()
+                .map(entry -> new OrderResult(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }

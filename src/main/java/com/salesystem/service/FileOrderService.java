@@ -8,6 +8,17 @@ import java.util.List;
 
 public class FileOrderService {
 
+    public class IORuntimeException extends RuntimeException {
+
+        public IORuntimeException(String message) {
+            super(message);
+        }
+
+        public IORuntimeException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
     public List<String> read(String filePath) {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -18,7 +29,7 @@ public class FileOrderService {
                 }
             }
         } catch (IOException error) {
-            System.err.println("Невозможно прочитать файл: " + error.getMessage());
+            throw new IORuntimeException("Невозможно прочитать файл: " + error.getMessage(), error);
         }
         return lines;
     }
@@ -26,10 +37,10 @@ public class FileOrderService {
         try(PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.println("company,totalPrice");
             for (OrderResult orderResult : orderResults) {
-                writer.println(orderResult.getCompanyName() + orderResult.getTotalPrice());
+                writer.println(orderResult.getCompanyName() + " " + orderResult.getTotalPrice());
             }
-        } catch (IOException e) {
-            System.err.println("Ошибка записи файла" + e.getMessage());
+        } catch (IOException error) {
+            throw new IORuntimeException("Невозможно прочитать файл: " + error.getMessage(), error);
         }
     }
 }

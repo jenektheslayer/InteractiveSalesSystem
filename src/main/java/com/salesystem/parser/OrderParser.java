@@ -28,8 +28,6 @@ public class OrderParser {
             double priceOfCement = Double.parseDouble(parts[2]);
             orders.add(new Order(purchaseDataTime, nameOfCompany, priceOfCement));
         }
-
-
         return orders;
     }
 }

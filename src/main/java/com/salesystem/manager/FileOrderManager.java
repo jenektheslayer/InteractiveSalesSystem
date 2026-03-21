@@ -9,20 +9,25 @@ import com.salesystem.service.OrderService;
 import java.util.List;
 
 public class FileOrderManager {
-    public void manage(String filePath, double baseDiscount, double stepDiscount, double minDiscount) {
-        FileOrderService fileOrderService = new FileOrderService();
+
+    private final FileOrderService fileOrderService;
+    private final OrderParser orderParser;
+    private final OrderService orderService;
+
+    public FileOrderManager(
+            FileOrderService fileOrderService,
+            OrderParser orderParser,
+            OrderService orderService
+    ) {
+        this.fileOrderService = fileOrderService;
+        this.orderParser = orderParser;
+        this.orderService = orderService;
+    }
+    public void manage(String filePath, double baseDiscount, double stepDiscount, double minDiscount, String fileName) {
+
         List<String> stringOrders = fileOrderService.read(filePath);
-        OrderParser orderParser = new OrderParser();
         List<Order> orders = orderParser.parse(stringOrders);
-        OrderService orderService = new OrderService();
-        List<OrderResult> orderResults = orderService.calculateOrderResults(orders,baseDiscount,stepDiscount,minDiscount);
-//        for (OrderResult orderResult : orderResults) {
-//            System.out.println(orderResult.getCompanyName() + " - " + orderResult.getTotalPrice());
-//        }
-        fileOrderService.save(orderResults,"orderResults");
-
-
-
-
+        List<OrderResult> orderResults = orderService.calculateOrderResults(orders, baseDiscount, stepDiscount, minDiscount);
+        fileOrderService.save(orderResults,fileName);
     }
 }
