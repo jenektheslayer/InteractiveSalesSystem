@@ -21,7 +21,8 @@ public class Main {
         fileOrderManager.manage(
                 "C:\\Users\\Андрей\\IdeaProjects\\sales_system\\InteractiveSalesSystem\\src\\main\\resources\\discount_day.txt",
                 0.5, 0.05, 0.0,
-                "C:\\Users\\Андрей\\IdeaProjects\\sales_system\\InteractiveSalesSystem\\src\\main\\resources\\orderResults.txt"
+                "C:\\Users\\Андрей\\IdeaProjects\\sales_system\\InteractiveSalesSystem\\src\\main\\resources\\orderResults.txt",
+                10.0
         );
 
     }

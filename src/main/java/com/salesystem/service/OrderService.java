@@ -12,7 +12,8 @@ public class OrderService {
             List<Order> orders,
             double baseDiscount,
             double stepDiscount,
-            double minDiscount
+            double minDiscount,
+            double price
     ) {
         orders.sort(Comparator.comparing(Order::getPurchaseDateTime));
 
@@ -24,7 +25,7 @@ public class OrderService {
             double orderAmount = order.getAmount();
             int currentCount = orderCounts.getOrDefault(companyName, 0);
             double currentDiscount = Math.max(baseDiscount - stepDiscount * currentCount, minDiscount);
-            double discountedAmount = 10 * orderAmount * (1 - currentDiscount);
+            double discountedAmount = price * orderAmount * (1 - currentDiscount);
             double currentTotal = resultsMap.getOrDefault(companyName, 0.0);
             resultsMap.put(companyName, currentTotal + discountedAmount);
             orderCounts.put(companyName, currentCount + 1);

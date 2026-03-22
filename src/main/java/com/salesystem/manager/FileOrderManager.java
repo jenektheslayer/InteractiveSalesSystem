@@ -23,11 +23,10 @@ public class FileOrderManager {
         this.orderParser = orderParser;
         this.orderService = orderService;
     }
-    public void manage(String filePath, double baseDiscount, double stepDiscount, double minDiscount, String fileName) {
-
+    public void manage(String filePath, double baseDiscount, double stepDiscount, double minDiscount, String fileName, double price) {
         List<String> stringOrders = fileOrderService.read(filePath);
         List<Order> orders = orderParser.parse(stringOrders);
-        List<OrderResult> orderResults = orderService.calculateOrderResults(orders, baseDiscount, stepDiscount, minDiscount);
-        fileOrderService.save(orderResults,fileName);
+        List<OrderResult> orderResults = orderService.calculateOrderResults(orders, baseDiscount, stepDiscount, minDiscount, price);
+        fileOrderService.save(orderResults, fileName);
     }
 }
