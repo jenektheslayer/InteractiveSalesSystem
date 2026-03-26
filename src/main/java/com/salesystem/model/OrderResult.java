@@ -9,12 +9,10 @@ public class OrderResult {
         this.totalPrice = totalPrice;
     }
 
-
     public String getCompanyName() {
         return companyName;
     }
     public double getTotalPrice() {
         return totalPrice;
     }
-
 }
