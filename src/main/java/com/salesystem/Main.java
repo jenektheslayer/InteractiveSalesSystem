@@ -4,13 +4,14 @@ package com.salesystem;
 import com.salesystem.manager.FileOrderManager;
 import com.salesystem.model.OrderResult;
 import com.salesystem.parser.OrderParser;
+import com.salesystem.parser.ParserFactory;
 import com.salesystem.service.FileOrderService;
 import com.salesystem.service.OrderService;
 
 
 public class Main {
     public static void main(String[] args) {
-        String filePath;
+
         FileOrderService fileOrderService = new FileOrderService();
         OrderParser orderParser = new OrderParser();
         OrderService orderService = new OrderService();

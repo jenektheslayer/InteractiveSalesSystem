@@ -23,6 +23,7 @@ public class FileOrderManager {
         this.orderParser = orderParser;
         this.orderService = orderService;
     }
+
     public void manage(String filePath, double baseDiscount, double stepDiscount, double minDiscount, String fileName, double price) {
         List<String> stringOrders = fileOrderService.read(filePath);
         List<Order> orders = orderParser.parse(stringOrders);

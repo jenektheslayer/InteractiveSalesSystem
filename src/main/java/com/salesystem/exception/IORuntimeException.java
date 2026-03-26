@@ -1,6 +1,4 @@
-package com.salesystem.service;
-
-
+package com.salesystem.exception;
 
 public class IORuntimeException extends RuntimeException {
 

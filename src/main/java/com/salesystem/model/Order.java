@@ -26,5 +26,4 @@ public class Order {
     public double getAmount() {
         return amount;
     }
-
 }
