@@ -1,5 +1,6 @@
 package com.salesystem.manager;
 
+import com.salesystem.exception.IORuntimeException;
 import com.salesystem.model.Order;
 import com.salesystem.model.OrderResult;
 import com.salesystem.parser.OrderParser;
@@ -14,8 +15,8 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 class FileOrderManagerTest {
 
@@ -61,4 +62,48 @@ class FileOrderManagerTest {
         verify(fileOrderService).save(orderResults, fileName);
     }
 
+    @Test
+    void shouldNotContinueWhenReadThrowsException() {
+        String filePath = "orders.txt";
+        String fileName = "result.txt";
+        double baseDiscount = 0.1;
+        double stepDiscount = 0.05;
+        double minDiscount = 0.02;
+        double price = 100.0;
+
+        when(fileOrderService.read(filePath)).thenThrow(new RuntimeException("Read failed"));
+
+        assertThrows(RuntimeException.class, () ->
+                fileOrderManager.manage(filePath, baseDiscount, stepDiscount, minDiscount, fileName, price)
+        );
+        verify(fileOrderService).read(filePath);
+        verify(orderParser, never()).parse(anyList());
+        verify(orderService, never()).calculateOrderResults(anyList(), anyDouble(), anyDouble(), anyDouble(), anyDouble());
+        verify(fileOrderService, never()).save(anyList(), anyString());
+    }
+
+    @Test
+    void shouldNotSaveWhenParseThrowsException() {
+        String filePath = "orders.txt";
+        String fileName = "result.txt";
+        double baseDiscount = 0.1;
+        double stepDiscount = 0.05;
+        double minDiscount = 0.02;
+        double price = 100.0;
+
+        List<String> rawsLines = List.of("order1","order2");
+
+        when(fileOrderService.read(filePath)).thenReturn(rawsLines);
+        when(orderParser.parse(rawsLines)).thenThrow(new RuntimeException("Parse failed"));
+
+        assertThrows(RuntimeException.class, () ->
+                fileOrderManager.manage(filePath, baseDiscount, stepDiscount, minDiscount, fileName, price)
+        );
+
+        verify(fileOrderService).read(filePath);
+        verify(orderParser).parse(rawsLines);
+        verify(orderService, never()).calculateOrderResults(anyList(), anyDouble(), anyDouble(), anyDouble(), anyDouble()
+        );
+
+    }
 }
