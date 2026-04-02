@@ -16,6 +16,7 @@ public class OrderParser {
     public OrderParser() {
         this.parserFactory = new ParserFactory();
     }
+
     public List<Order> parse(List<String> lines) {
 
         LineParser lineParser = parserFactory.getParserForFile(lines.get(0));

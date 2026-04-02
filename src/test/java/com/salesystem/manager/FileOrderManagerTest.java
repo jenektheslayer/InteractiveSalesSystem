@@ -104,6 +104,5 @@ class FileOrderManagerTest {
         verify(orderParser).parse(rawsLines);
         verify(orderService, never()).calculateOrderResults(anyList(), anyDouble(), anyDouble(), anyDouble(), anyDouble()
         );
-
     }
 }
