@@ -13,8 +13,8 @@ public class OrderParser {
 
     private final ParserFactory parserFactory;
 
-    public OrderParser() {
-        this.parserFactory = new ParserFactory();
+    public OrderParser(ParserFactory parserFactory) {
+        this.parserFactory = parserFactory;
     }
 
     public List<Order> parse(List<String> lines) {

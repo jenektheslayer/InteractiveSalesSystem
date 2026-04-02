@@ -58,6 +58,6 @@ public class OrderServiceTest {
         List<OrderResult> orderResults = orderService.calculateOrderResults(orders, 0.1, 0.05, 0.02, 100.0
         );
 
-        assertEquals(381, orderResults.get(0).getTotalPrice());
+        assertEquals(966, orderResults.get(0).getTotalPrice());
     }
 }

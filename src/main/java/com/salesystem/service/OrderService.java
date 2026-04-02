@@ -14,12 +14,13 @@ public class OrderService {
             double minDiscount,
             double price
     ) {
-        orders.sort(Comparator.comparing(Order::getPurchaseDateTime));
+        List<Order> sortedOrders = new ArrayList<>(orders);
+        sortedOrders.sort(Comparator.comparing(Order::getPurchaseDateTime));
 
         Map<String, Double> resultsMap = new HashMap<>();
         Map<String, Integer> orderCounts = new HashMap<>();
         List<String> results = new ArrayList<>();
-        for (Order order : orders) {
+        for (Order order : sortedOrders) {
             String companyName = order.getCompanyName();
             double orderAmount = order.getAmount();
             int currentCount = orderCounts.getOrDefault(companyName, 0);

@@ -12,8 +12,9 @@ import com.salesystem.service.OrderService;
 public class Main {
     public static void main(String[] args) {
 
+        ParserFactory parserFactory = new ParserFactory();
         FileOrderService fileOrderService = new FileOrderService();
-        OrderParser orderParser = new OrderParser();
+        OrderParser orderParser = new OrderParser(parserFactory);
         OrderService orderService = new OrderService();
         FileOrderManager fileOrderManager = new FileOrderManager(
                 fileOrderService,
@@ -25,6 +26,5 @@ public class Main {
                 "C:\\Users\\Андрей\\IdeaProjects\\sales_system\\InteractiveSalesSystem\\src\\main\\resources\\orderResults.txt",
                 10.0
         );
-
     }
 }

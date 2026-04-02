@@ -1,6 +1,7 @@
 package com.salesystem.parser;
 
 import com.salesystem.model.Order;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Or;
 
@@ -10,6 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderParserTest {
 
+    private OrderParser orderParser;
+
+    @BeforeEach
+    void setUp() {
+        ParserFactory parserFactory = new ParserFactory();
+        orderParser = new OrderParser(parserFactory);
+    }
+
     @Test
     void parseLineCorrectLinesAndCreatingOrders() {
 
@@ -17,7 +26,9 @@ public class OrderParserTest {
                 "2026-04-02T14:00:00|Sberbank|1100.0",
                 "2026-04-02T15:00:00|Yandex|2200.0"
         );
-        OrderParser orderParser = new OrderParser();
+
+        ParserFactory parserFactory = new ParserFactory();
+        OrderParser orderParser = new OrderParser(parserFactory);
 
         List<Order> orders = orderParser.parse(lines);
 
@@ -36,7 +47,6 @@ public class OrderParserTest {
                 "2026-04-02T14:00:00#Apple#1100.0",
                 "2026-04-02T15:00:00#Google#2200.0"
         );
-        OrderParser orderParser = new OrderParser();
 
         List<Order> orders = orderParser.parse(lines);
 
@@ -52,8 +62,6 @@ public class OrderParserTest {
 
         List<String> lines = List.of("2026-04-02T14:00:00,Company 1");
 
-        OrderParser orderParser = new OrderParser();
-
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> orderParser.parse(lines)
         );
@@ -64,8 +72,6 @@ public class OrderParserTest {
     void parseInvalidDateTimeFormatThrows() {
 
         List<String> lines = List.of("yyyy-aa-bbT12:00:00,Company 1,100.0");
-
-        OrderParser orderParser = new OrderParser();
 
         assertThrows(
                 IllegalArgumentException.class,
